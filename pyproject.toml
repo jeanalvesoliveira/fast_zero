@@ -48,6 +48,7 @@ addopts = '-p no:warnings'
 # configuração do taskipy
 [tool.taskipy.tasks]
 run_dev = 'fastapi dev fast_zero/app.py'
+run_dev_lan = 'fastapi dev fast_zero/app.py --host 0.0.0.0'
 
 # será executando antes do test
 pre_test = 'task lint' 

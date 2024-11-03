@@ -18,4 +18,4 @@ def test_read_root_deve_retornar_ok_e_ola_mundo() -> None:
     assert response.status_code == HTTPStatus.OK
 
     # Garantir que retornou um JSON com o conteúdo certo
-    assert response.json() == {'message': 'Ola Mundo'}
+    assert response.json() == {'message': 'Olá Mundo'}

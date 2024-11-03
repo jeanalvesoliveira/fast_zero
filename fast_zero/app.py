@@ -5,4 +5,4 @@ app = FastAPI()
 
 @app.get('/')
 async def read_root() -> dict[str, str]:
-    return {'message': 'Ola Mundo'}
+    return {'message': 'Olá Mundo'}

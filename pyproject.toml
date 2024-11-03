@@ -1,0 +1,67 @@
+[tool.poetry]
+name = "fast-zero"
+version = "0.1.0"
+description = ""
+authors = ["Jean Alves de Oliveira"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "3.13.*"
+fastapi = {extras = ["standard"], version = "^0.115.4"}
+uvicorn = "^0.32.0"
+
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.7.2"
+pytest = "^8.3.3"
+pytest-cov = "^6.0.0"
+taskipy = "^1.14.0"
+
+
+# configuração do Ruff
+[tool.ruff]
+line-length = 79 # Quantidade máxima de caracteres
+extend-exclude = ['migrations'] # Para não formatar os arquivos dentro desta pasta
+
+
+# configuração do Linter do Ruff
+[tool.ruff.lint]
+preview = true
+select = ['I', 'F', 'E', 'W', 'PL', 'PT']
+
+
+# configuração do Formatador do Ruff
+[tool.ruff.format]
+preview = true
+quote-style = 'single' # Transforma aspas duplas em simples
+
+
+# configuração do pytest
+[tool.pytest.ini_options]
+# Local dos testes
+pythonpath = '.'
+# Visualização mais limpa dos testes
+# suprimindo os warnings de libs externas
+addopts = '-p no:warnings' 
+
+
+# configuração do taskipy
+[tool.taskipy.tasks]
+run_dev = 'fastapi dev fast_zero/app.py'
+
+# será executando antes do test
+pre_test = 'task lint' 
+# será executado se o pre_test ter êxito
+test = 'pytest --cov=fast_zero -vv'
+# será executado depois do test, caso o test tenha êxito
+post_test = 'coverage html'
+
+lint = 'ruff check . && ruff check . --diff'
+lint_fix = 'ruff check . --fix'
+
+format = 'ruff format .'
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "fast-zero"
 version = "0.1.0"
-description = ""
+description = "API do curso de FastAPI"
 authors = ["Jean Alves de Oliveira"]
 readme = "README.md"
 
@@ -9,6 +9,7 @@ readme = "README.md"
 python = "3.13.*"
 fastapi = {extras = ["standard"], version = "^0.115.4"}
 uvicorn = "^0.32.0"
+pydantic = {extras = ["email"], version = "^2.9.2"}
 
 
 [tool.poetry.group.dev.dependencies]

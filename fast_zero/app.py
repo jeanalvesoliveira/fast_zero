@@ -1,4 +1,5 @@
 from http import HTTPStatus
+from typing import Dict, Any
 
 from fastapi import FastAPI
 
@@ -6,7 +7,7 @@ from fastapi import FastAPI
 # que o FastAPI retorne páginas HTML
 from fastapi.responses import HTMLResponse
 
-from fast_zero.schemas import Message
+from fast_zero.schemas import Message, UserSchema, UserPublic
 
 app = FastAPI()
 
@@ -15,7 +16,7 @@ app = FastAPI()
 # esta requição deve retornar
 # por padrão o FastAPI retorna somente JSON
 @app.get('/', status_code=HTTPStatus.OK, response_model=Message)
-async def read_root() -> dict[str, str]:
+def read_root() -> dict[str, str]:
     return {'message': 'Olá Mundo', 'arroz': '20'}
 
 
@@ -24,7 +25,7 @@ async def read_root() -> dict[str, str]:
          status_code=HTTPStatus.OK,
          response_class=HTMLResponse
          )
-async def read_pagina() -> str:
+def read_pagina() -> str:
     return """
     <html>
         <head>
@@ -36,3 +37,8 @@ async def read_pagina() -> str:
         </body>
     </html>
     """
+
+
+@app.post('/users/', response_model=UserPublic)
+def create_user(user: UserSchema) -> Any:
+    return user

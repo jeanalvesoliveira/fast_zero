@@ -1,5 +1,4 @@
 from http import HTTPStatus
-from typing import Any
 
 from fastapi import FastAPI
 
@@ -7,7 +6,7 @@ from fastapi import FastAPI
 # que o FastAPI retorne páginas HTML
 from fastapi.responses import HTMLResponse
 
-from fast_zero.schemas import Message, UserDb, UserPublic, UserSchema
+from fast_zero.schemas import Message, UserDb, UserList, UserPublic, UserSchema
 
 app = FastAPI()
 
@@ -40,7 +39,7 @@ async def read_pagina() -> str:
 
 
 @app.post('/users/', status_code=HTTPStatus.CREATED, response_model=UserPublic)
-async def create_user(user: UserSchema) -> Any:
+async def create_user(user: UserSchema) -> UserDb | None:
     # abrindo o debugger
     # breakpoint()
 
@@ -56,5 +55,22 @@ async def create_user(user: UserSchema) -> Any:
 
     # adicionando o usuario ao 'banco'
     database.append(user_with_id)
+
+    return user_with_id
+
+
+@app.get('/users/', status_code=HTTPStatus.OK, response_model=UserList)
+async def read_users() -> dict[str, list[UserPublic]]:
+    return {'users': database}
+
+
+@app.put('/users/{user_id}', response_model=UserPublic)
+async def update_users(user_id: int, user: UserSchema) -> UserDb | None:
+    user_with_id = UserDb(id=user_id, **user.model_dump())
+
+    # como ainda é um banco fake
+    # o índice é o ID - 1
+    # exemplo: Id = 1, o índice na lista é 0
+    database[user_id - 1] = user_with_id
 
     return user_with_id

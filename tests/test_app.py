@@ -46,7 +46,7 @@ def test_read_pagina_deve_retornar_ok_e_ola_mundo_em_html(client) -> None:
 
 def test_create_user(client) -> None:
     # 02. Fase de ação (act)
-    # Requisitando o recurso localizado no endpoint '/users/'
+    # enviando um JSON através do verbo POST para o endpoint '/users/'
     response = client.post(
         '/users/',
         json={
@@ -64,6 +64,51 @@ def test_create_user(client) -> None:
     # Validar UserPublic
     assert response.json() == {
         'username': 'testeusername',
+        'email': 'teste@test.com',
+        'id': 1,
+    }
+
+
+def test_read_users(client) -> None:
+    # 02. Fase de ação (act)
+    # Requisitando o recurso localizado
+    # no endpoint '/users/' através do verbo GET
+    response = client.get('/users/')
+
+    # 03. Fase de afirmação (assert)
+    # Garantir que retornou status code OK (200)
+    assert response.status_code == HTTPStatus.OK
+
+    # Garantir que retornou um JSON com o conteúdo certo
+    assert response.json() == {
+        'users': [
+            {
+                'username': 'testeusername',
+                'email': 'teste@test.com',
+                'id': 1,
+            }
+        ]
+    }
+
+
+def test_update_user(client) -> None:
+    # 02. Fase de ação (act)
+    # Realizando uma requisição PUT
+    # passando o endpoint e o json
+    response = client.put(
+        '/users/1',
+        json={
+            'password': '123456',
+            'username': 'testeusername2',
+            'email': 'teste@test.com',
+            'id': 1,
+        },
+    )
+
+    # 03. Fase de afirmação (assert)
+    # Garantir que retornou um JSON com o conteúdo certo
+    assert response.json() == {
+        'username': 'testeusername2',
         'email': 'teste@test.com',
         'id': 1,
     }

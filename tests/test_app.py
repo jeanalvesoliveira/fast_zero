@@ -8,6 +8,7 @@ from fast_zero.app import app
 
 # fixture é uma função cujo retorno
 # é passado para as funções de testes
+# aplicando o princípio DRY (Não se repita)
 @pytest.fixture
 def client() -> TestClient:
     # 01. Fase de organização (arrange)

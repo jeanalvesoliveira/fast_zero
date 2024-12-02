@@ -1,18 +1,13 @@
 from http import HTTPStatus
 
-import pytest
-from fastapi.testclient import TestClient
-
-from fast_zero.app import app
-
-
 # fixture é uma função cujo retorno
 # é passado para as funções de testes
 # aplicando o princípio DRY (Não se repita)
-@pytest.fixture
-def client() -> TestClient:
-    # 01. Fase de organização (arrange)
-    return TestClient(app)  # Criando o cliente de testes
+# geralmente os fixtures ficam em um arquivo chamado conftest.py
+# @pytest.fixture()
+# def client() -> TestClient:
+# 01. Fase de organização (arrange)
+#     return TestClient(app)  # Criando o cliente de testes
 
 
 def test_read_root_deve_retornar_ok_e_ola_mundo(client) -> None:
@@ -57,8 +52,8 @@ def test_create_user(client) -> None:
         json={
             'username': 'testeusername',
             'email': 'teste@test.com',
-            'password': 'password'
-        }
+            'password': 'password',
+        },
     )
 
     # 03. Fase de afirmação (assert)
@@ -68,7 +63,7 @@ def test_create_user(client) -> None:
     # Garantir que retornou os dados corretos
     # Validar UserPublic
     assert response.json() == {
-            'username': 'testeusername',
-            'email': 'teste@test.com',
-            'id': 1
+        'username': 'testeusername',
+        'email': 'teste@test.com',
+        'id': 1,
     }

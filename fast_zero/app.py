@@ -41,19 +41,17 @@ async def read_pagina() -> str:
 
 @app.post('/users/', status_code=HTTPStatus.CREATED, response_model=UserPublic)
 async def create_user(user: UserSchema) -> Any:
-
     # abrindo o debugger
     # breakpoint()
 
     user_with_id = UserDb(
         # id fake auto-incremento
         id=len(database) + 1,
-
         # converte o objeto user (recebido)
         # em um dicionário: user.model_dump()
         # e extrai os pares chave->valor
         # em atributos: operador **
-        **user.model_dump()
+        **user.model_dump(),
     )
 
     # adicionando o usuario ao 'banco'

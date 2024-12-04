@@ -20,7 +20,7 @@ def test_read_root_deve_retornar_ok_e_ola_mundo(client) -> None:
     assert response.status_code == HTTPStatus.OK
 
     # Garantir que retornou um JSON com o conteúdo certo
-    assert response.json() == {'message': 'Olá Mundo', 'arroz': 20}
+    assert response.json() == {'message': 'Olá Mundo'}
 
 
 def test_read_pagina_deve_retornar_ok_e_ola_mundo_em_html(client) -> None:
@@ -91,7 +91,31 @@ def test_read_users(client) -> None:
     }
 
 
-def test_update_user(client) -> None:
+def test_read_one_user(client) -> None:
+    response = client.get('/users/1')
+
+    assert response.json() == {
+        'username': 'testeusername',
+        'email': 'teste@test.com',
+        'id': 1,
+    }
+
+
+def test_verifica_se_retorna_codigo_404_ao_tentar_retornar_um_usuario(
+    client,
+) -> None:
+    # 02. Fase de ação (act)
+    # Realizando uma requisição PUT
+    # passando o endpoint e o json
+    # com um ID invalido
+    response = client.get('/users/0')
+
+    # 03. Fase de afirmação (assert)
+    # Garantir que retornou status code NOT FOUND (404)
+    assert response.status_code == HTTPStatus.NOT_FOUND
+
+
+def test_update_users(client) -> None:
     # 02. Fase de ação (act)
     # Realizando uma requisição PUT
     # passando o endpoint e o json
@@ -112,3 +136,44 @@ def test_update_user(client) -> None:
         'email': 'teste@test.com',
         'id': 1,
     }
+
+
+def test_verifica_se_retorna_codigo_404_ao_tentar_atualizar(client) -> None:
+    # 02. Fase de ação (act)
+    # Realizando uma requisição PUT
+    # passando o endpoint e o json
+    # com um ID invalido
+    response = client.put(
+        '/users/0',
+        json={
+            'password': '123456',
+            'username': 'testeusername2',
+            'email': 'teste@test.com',
+            'id': 1,
+        },
+    )
+
+    # 03. Fase de afirmação (assert)
+    # Garantir que retornou status code NOT FOUND (404)
+    assert response.status_code == HTTPStatus.NOT_FOUND
+
+
+def test_delete_user(client) -> None:
+    # 02. Fase de ação (act)
+    # Realizando uma requisição DELETE
+    response = client.delete('/users/1')
+
+    # 03. Fase de afirmação (assert)
+    # Garantir que retornou um JSON com o conteúdo certo
+    assert response.json() == {'message': 'User deleted'}
+
+
+def test_verifica_se_retorna_codigo_404_ao_tentar_deletar(client) -> None:
+    # 02. Fase de ação (act)
+    # Realizando uma requisição DELETE
+    # com um ID invalido
+    response = client.delete('/users/0')
+
+    # 03. Fase de afirmação (assert)
+    # Garantir que retornou status code NOT FOUND (404)
+    assert response.status_code == HTTPStatus.NOT_FOUND
